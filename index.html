@@ -1,0 +1,267 @@
+<!--    https://four4to6.x0.com/category/javascript/cesiumjs-memorandum/
+		https://www.torutk.com/projects/swe/wiki/CesiumJS_quickstart
+     -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta name="description" content="会津美里町の紹介">
+<meta name="keyword" content="会津美里町,宮川,博士山,美里,故郷,紹介">
+<title>会津美里会のホームページ</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="stellarnav.min.js"></script>
+<link  href="stellarnav.css" rel="stylesheet">
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.99/Build/Cesium/Cesium.js"></script>
+<link  href="https://cesium.com/downloads/cesiumjs/releases/1.99/Build/Cesium/Widgets/widgets.css" rel="stylesheet"> 
+<style>
+body             { width: 100%; height:100%;   margin:0; padding:0; }
+#cesiumContainer { width: 100%; height:100vh;  margin:0; padding:0; }
+#ifrm            { width: 100%; height:100vh;  margin:0; padding:0; display:none; }
+#scdl            { position: absolute;  bottom: 0;  left: 0; }
+table { border:1px solid lightgray;  border-collapse:collapse; }
+th    { text-align: center; }
+td    { border:1px solid lightgray;  white-space:nowrap; text-align: left; padding:2px; }
+a     { text-decoration: none; }
+#copyright { font: 10px "Meiryo UI"; margin : 0; text-align: center; color: gray; }
+.link:hover { cursor: pointer; }
+/********************************************************  携帯  */
+@media screen and (max-width: 1024px) {
+th, td { font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+<div class="stellarnav">
+<ul id="menu" style="z-index:9900;">
+	<li><a href="index.html">トップ</a>
+	<li><a href="#">会津美里会</a>
+		<ul>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","misatokai.html?1");'>会津美里会規約</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","misatokai.html?2");'>設立趣旨</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","misatokai.html?3");'>役員</a>
+		<li style="line-height:0.5;"><a href="./admin/index.html" target="_blank");'><small style="color:silver;">管理者用</small></a>
+		</ul>
+	<li><a href="#">総会・イベント</a>
+		<ul>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?13");'>会津美里町合併20周年記念式典(2025/10/4)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?12");'>令和７年新年会(2025/2/18 吉池食堂)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?11");'>令和６年総会　(2024/6/15 東京新潟県人会館)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?10");'>令和６年新年会(2024/2/7 吉池食堂)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?09");'>令和５年総会　(2023/10/28 台東区民会館)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?08");'>令和５年新年会(2023/2/8 吉池食堂)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?07");'>令和４年総会　(2022/10/8 台東区民会館)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?06");'>令和元年総会　(2019/10/26 旦妃楼飯店)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?05");'>平成３０年総会(2018/10/27 旦妃楼飯店)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?04");'>平成２９年総会(2017 ホテルラングウッド)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?03");'>平成２８年総会(2016 ホテルラングウッド)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?02");'>平成２７年総会(2015 台東区民会館)</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?01");'>平成２６年総会(2014 台東区民会館)</a>
+		</ul>
+	<li><a href="#">会員交流の場</a>
+		<ul>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","kouryuu.html?kinnosuke");'>小林欽之助様 法用寺</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","kouryuu.html?kasuo");'>糟尾早苗様 法用寺</a>
+		<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","kouryuu.html?kawa_haiku");'>川口政治様 俳句</a>
+		</ul>
+	<li><a href="#">ﾈｯﾄで見つけた故郷情報</a>
+		<ul>
+		<li><a href="https://www.youtube.com/embed/hfFGkh35IZ8?autoplay=1&mute=0" target="_blank" title="">90年前の会津美里町　旧須藤写真館提供映像</a>
+		<li><a href="https://www.youtube.com/watch?v=hfFGkh35IZ8&t=725s" target="_blank" title="">90年前の会津美里町　旧須藤写真館提供映像</a>
+		<li><a href="https://www.youtube.com/embed/FR01MBy1Jnw?autoplay=1&mute=0" target="_blank" title="">昭和11年 大雪 疎開児童 旧須藤写真館提供映像</a>
+		<li><a href="https://www.youtube.com/embed/B6V41Ih3bZQ?autoplay=1&mute=0" target="_blank" title="">会津美里町　旧宮川中学校　校歌</a>
+		<li><a href="https://www.pref.fukushima.lg.jp/sec/41340a/www-wakamatsu-kensetsu253.html" target="_blank" title="県道赤留塔寺線（県道三六五号）は、重要な生活道路である。&#13;&#10;会津美里町高田と会津坂下町を結ぶ南北の道は、二つのルートがある。坂下の古坂下～羽林～金沢～新屋敷～境野～高田の現在の県道会津坂下会津高田線（県道二二号線）と、西の山麓の縁に沿った、塔寺～杉～勝方～出戸田沢～佐賀瀬川～米沢～雀林～赤留の県道赤留塔寺線である。 &#13;&#10;県道会津坂下会津高田線のルートは江戸期になって発達し、幹線ルートとしての役割を今でも果たしている。&#13;&#10;県道赤留塔寺線は、江戸期よりも古くから人々が通っていた道であったが、県道会津坂下会津高田線が徐々に改修されるにしたがって、忘れられてきたのである。">いにしえの会津文化をたどる道</a>
+		<li><a href="aizu33.html" target="_blank" title="３３のうち１０の観音様が会津美里町にあります。&#13;&#10;会津美里町観光協会のパンフレット「会津はここからはじまった」の言葉があらためて思い起こされます。");'>会津33観音</a>
+		<li><a href="https://rekishikaido.php.co.jp/detail/11020" target="_blank" title="天海大僧正　蘆名氏ゆかりの人物&#13;&#10;１５３６（天文５）年、会津美里町が産んだ天下の名僧。&#13;&#10;兵太郎、随風(龍興寺)、天海、天海大僧正 尊号は南光坊、慈眼大師（会津大沼郡高田郷の人で、&#13;&#10;1536年（天文5年）生まれと伝えらる。幼名は兵太郎、10歳のとき随風といい、55歳のとき天海と改む）">天海大僧正</a>
+		<li><a href="https://www.kutsurogijuku.jp/blog/2019/09/16/hakaseyama/" target="_blank" title="会津3町村（会津美里町、昭和村、柳津町）の境界に位置している山。&#13;&#10;博士の語源は、その昔、大和朝廷が東北の民を治めるとき、太刀を腰に佩（は）いて（手挟（たばさ）んで）峰通しにたどったところから、「佩かせ」と呼ばれ、転じて「博士」となったという説が伝わっている。&#13;&#10;博士山山頂の手前、社峰と呼ばれる前衛峰には、その昔、現在は会津美里町にある伊佐須美神社があったといわれる。">博士山</a>
+		<li><a href="https://bunbun.hatenablog.com/entry/hutanuma" target="_blank" title="雀林(すずめばやし)・八木沢(やぎさわ)集落の西の山上に位置する。&#13;&#10;この地域には蓋沼、古潟沼、湿原、三角沼（池）、大窪ため池の五つの池があるが、浮島がある蓋沼が代表的。&#13;&#10;標高470ｍ前後、沿岸線343ｍ、長径(ちょうけい)135ｍ。">蓋沼</a>
+		<li><a href="https://akiou.wordpress.com/2017/08/04/mukai_haguroyama/" target="_blank" title="向羽黒山城は、会津の戦国大名 蘆名氏が築いた東北最大級の巨大山城。&#13;&#10;蘆名氏の全盛期を築いた16代当主 蘆名盛氏は8年もの歳月をかけて巨大城郭を築いたが、後継者が相次いで早死。蘆名氏は盛氏死後わずか数年で摺上原の合戦で伊達政宗に大敗し滅亡。&#13;&#10;蘆名氏の後に会津領主となった伊達氏・蒲生氏・上杉氏らも向羽黒山城を改修し維持したが、上杉景勝の米沢転封で廃城となった。">向羽黒山城 1,2,3</a>
+		<li><a href="https://www.youtube.com/watch?v=uTTVZCSu134" target="_blank" title="遠藤玉水は本郷の出身で、兄の他に近くには歌川重雄がいましたので、民謡漬けの環境だったようです。&#13;&#10;地元の盆踊り唄（別名 瀬戸屋甚句）ですから、のびのびと唄っています。">本郷甚句(遠藤玉水)</a>
+		<li><a href="https://www.youtube.com/watch?v=Bki5f_q4KHM" target="_blank" title="平成で日本一美しいダムの放流はここだ！福島県宮川ダム、新宮川ダムを見学&空撮！！【SiphonTV227】。&#13;&#10;ダム湖の名称は「会津美里湖」。関係町村の住民から公募。ダムの所在する町の名であり、また、ダムの水により地域が水に育まれた美しいふる里となることを祈念したものという。">平成で日本一美しいダムの放流</a>
+		<li><a href="https://www.ajiko.co.jp/yomimono/soramori01.html" target="_blank" title="戦後まもなく、源太谷（ゲンダガヤ）のずっと奥に飛行機が墜落した。&#13;&#10;まだ小学低学年だった。飛行機はアメリカ軍のもので金目のものを一杯積んでいたらしい。源太谷だから行ってみないか・・・と噂したことがあった。&#13;&#10;結能は会津美里町東尾岐の集落の一つであり、江戸時代はこの峠を超えて大内・楢原・田島・今市に抜ける街道でもあった。">東尾岐の奥　結能峠の航空機事故</a>
+		</ul>
+	<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","nishimachi.html");'>西町いさすみ会</a>
+	<li><a href="#" onclick='cesiumOff(); $("#ifrm").attr("src","keimei/kokuminGakkou.html");'>啓明国民学校</a>
+</ul>
+</div><!-- .stellarnav -->									<!-- === メニュー終わり === -->
+<iframe id="ifrm" style="z-index:777;"></iframe>			<!-- === 各種メニュー表示部 === -->
+<div id="cesiumContainer" style="z-index:888;"></div>		<!-- === 背景画像 === -->
+<div id="scdl" style="z-index:887;">						<!-- === 行事・新着情報 ==== -->
+	<table style="border:0;"><tr style="border:0;">
+		<td style="border:0; margin:0; padding:0;">
+		<img src="img/tojiru-1.png" onclick="$('#scdl').css('display','none'); $('#hiraku').css('display','inline');">
+		<td style="border:0;">
+		<table>
+			<tr><th colspan=3>【行事予定・イベント情報】</th>
+			<tr class="link" onclick='window.open("https://aizumonogatari.com/event/5394.html","_blank");'><td>2026/01/第2土曜<td>大俵引き<td>会津美里町内
+			<tr class="link" onclick='window.open("https://sin-ai.com/29264/","_blank");'>                 <td>2026/02/25<td>文殊大祭(お文殊さま)<td>会津美里町
+<!--											https://gokujo-aizu.com/event-info/event-middle#contents
+												https://www.town.aizumisato.fukushima.jp/mobile/1817.html
+												https://www.town.aizumisato.fukushima.jp/calendar.html
+			<tr><td>2026/01/07<td>へびの御年始<td>法用寺
+			<tr><td>2026/01/第2土曜<td>大俵引き<td>会津美里町内
+			<tr><td>2026/02/25<td>文殊大祭(お文殊さま)<td>会津美里町
+			<tr><td>2026/03/20～21<td>西勝の彼岸獅子<td>西勝
+			<tr><td>2026/04/29<td>花祝祭<td>伊佐美神社境内(伊佐美神社のご神木「薄墨桜」の霊を鎮めるお祭り)
+			<tr><td>2026/05/第3日曜日<td>ヒルクライムin会津<td>会津美里町から大内宿に向かう13.5km高低差600mを自転車で…
+			<tr><td>2026/05/最終日曜日<td>ふれあい茶会<td>向羽黒山城跡
+			<tr><td>2026/06/第1日曜日<td>明神ヶ岳山開<td>尾岐冑
+			<tr><td>2026/06/15～7月/5<td>あやめ祭り<td>あやめ苑(伊佐須美神社 外苑)
+			<tr><td>2026/07/11～13<td>御田植祭<td>12日は11日の宵祭から13日の早苗振祭まで３日間の祭事のメイン
+			<tr><td>2026/07/19<td>高橋の虫送り<td>尾岐高橋
+			<tr><td>2026/08/第1日曜日<td>本郷せと市<td>本郷地域瀬戸町通り
+			<tr><td>2026/09/第3日曜～月曜<td>秋季祭礼<td>本郷地域
+			<tr><td>2026/10/第2日曜日<td>会津美里ワインフェス<td>新鶴
+			<tr><td>2026/10/下旬～11月上旬<td>法用寺奉納菊花展<td>法用寺境内
+			<tr><td>2026/11/1～10<td>中田観音菊祭り大祭<td>中田観音境内
+== 過去データ
+			<tr><td>2025/11/06<td>寛永寺根本中堂天井画見学ツアー<td>鶯谷駅南口改札(13:00)
+-->
+		</table>
+		<hr style="border-top:0.5 solid skyblue; height:0; margin:3px 0; padding:0;">
+		<table>
+			<tr><th colspan=2>【新着情報】</th>
+			<tr class="link" onclick='cesiumOff(); $("#ifrm").attr("src","event.html?13");'><td>2025/10/04<td>会津美里町合併20周年記念式典に参加しました
+		</table>
+	</table>
+</div>														<!-- === 行事・新着情報 終り === -->
+<div id="hiraku" style="display:none; position:absolute; bottom:50%; left:0;">
+	<img src="img/hiraku-1.png" onclick="$('#hiraku').css('display','none'); $('#scdl').css('display','inline');">
+</div>														<!-- === copyright === -->
+<div id="cRight" style="position:absolute; bottom:0; left:46%; z-index:999;">
+	<pre id="copyright">会津美里会 2017 2025</pre>
+	<iframe src="count/count.php" height="23" width="70" frameborder="0" scrolling="no" style="display:none;margin:-11px 0 3px 0;"></iframe>
+</div>														<!-- === 行事・新着情報 終り === -->
+<div id="note" style="display:none; position:absolute;top:6%;right:1%; z-index:999; font:bold 1.3em HG丸ｺﾞｼｯｸM-PRO; color:slateblue;">
+	背景はマウスで移動・拡縮が可能です
+</div>
+<!-- ============================================================================= -->
+<script>
+$(function() {
+	jQuery('.stellarnav').stellarNav({									// ステラナヴ  メニュー機能を初期化
+		theme: 'dark',
+		breakpoint: 768,
+		position: 'right',
+		closeBtn: true,
+		closeLabel: ' 閉じる',
+		closingDelay: 1000,
+	});
+
+	setTimeout(function() { noteOn(); }, 600);							// 背景移動に関する注釈を表示＆消去
+});
+function noteOn() {
+	$("#note").css("display","inline");
+	setTimeout(function() { $("#note").css("display","none"); }, 2500);
+}
+
+// =========================================================  cesium 関係の初期化、役場位置の表示
+Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOTcxNDExOC1iZGIwLTRlNmItYjY0Mi04OTQxYTA4NzQyNjQiLCJpZCI6MjcyOTU5LCJpYXQiOjE3Mzg3MzYyNDl9.k6WMMtI6oIUz59pskoC-bRlWvOnmz65hBlsusaEloF4';
+var viewer = new Cesium.Viewer('cesiumContainer', {
+  animation: false,			// 再生アニメーションの無効化
+  baseLayerPicker: false,	// レイヤー切替釦
+  cesiumWidget: false,
+  fullscreenButton: true,	// 全画面表示ボタン
+  geocoder:false,			// 地理検索機能（地名検索）を有効にするかどうか
+  homeButton: false,		// 初期位置（ホーム）に戻るボタンを表示
+  navigationHelpButton:false,	//ナビゲーションヘルプを表示
+  sceneModePicker:false,	// 初期シーンモード（3D、2D、2.5D）設定
+  timeline: false,			// タイムライン表示の無効化
+});
+//viewer.forceResize();
+viewer._cesiumWidget._creditContainer.parentNode.removeChild(viewer._cesiumWidget._creditContainer);	// Cesium ロゴの削除
+
+(function(){
+	var ekb1 = viewer.entities.add(
+	{	name : '会津美里町役場',
+		position: Cesium.Cartesian3.fromDegrees(139.8342242, 37.4654101),		// ポインタの緯度経度、大きさ、色
+		point: {
+			  pixelSize: 15,
+			  color: Cesium.Color.RED
+		},
+		label : {																// ポインタに接するラベルの設定
+			  fillColor : Cesium.Color.MAGENTA,
+			  text: '会津美里町役場',
+			  font: 'bold 12pt HG丸ｺﾞｼｯｸM-PRO',
+			  style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+			  outlineWidth: 0,
+			  verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+			  pixelOffset: new Cesium.Cartesian2(0, -10)		// 中心点からのオフセット位置(x,y)
+		}
+	});
+
+	var ekb2 = viewer.entities.add(
+	{	name : '本郷支所',
+		position: Cesium.Cartesian3.fromDegrees(139.8839222, 37.4530877),		// ポインタの緯度経度、大きさ、色
+		point: {
+			  pixelSize: 15,
+			  color: Cesium.Color.RED
+		},
+		label : {															// ポインタに接するラベルの設定
+			  fillColor : Cesium.Color.MAGENTA,
+			  text: '本郷庁舎',
+			  font: 'bold 12pt HG丸ｺﾞｼｯｸM-PRO',
+			  style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+			  outlineWidth: 0,
+			  verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+			  pixelOffset: new Cesium.Cartesian2(0, -10)		// 中心点からのオフセット位置(x,y)
+		}
+	});
+
+	var ekb3 = viewer.entities.add(
+	{	name : '新鶴支所',
+		position: Cesium.Cartesian3.fromDegrees(139.8312442, 37.5112611),		// ポインタの緯度経度、大きさ、色
+		point: {
+			  pixelSize: 15,
+			  color: Cesium.Color.RED
+		},
+		label : {															// ポインタに接するラベルの設定
+			  fillColor : Cesium.Color.MAGENTA,
+			  text: '新鶴庁舎',
+			  font: 'bold 12pt HG丸ｺﾞｼｯｸM-PRO',
+			  style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+			  outlineWidth: 0,
+			  verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+			  pixelOffset: new Cesium.Cartesian2(0, -10)		// 中心点からのオフセット位置(x,y)
+		}
+	});
+  viewer.camera.flyTo({					// カメラの初期位置の指定
+    destination: Cesium.Cartesian3.fromDegrees(139.840, 37.475, 17000.0),
+  });
+
+})();
+
+// 背景をsecium画像にするか国土地理院画像にするかを決める
+var bgFlg = localStorage.getItem( "bgSwFlg" );
+if ( bgFlg==null || bgFlg=="secium" ) {
+	localStorage.setItem( "bgSwFlg", "GSI" );				// 次の起動時は背景を国土地理院画面にする
+} else {
+	const imageProvider = new Cesium.OpenStreetMapImageryProvider({		//国土地理院のレイヤーで表示する
+		url: 'https://cyberjapandata.gsi.go.jp/xyz/std/',
+		credit: new Cesium.Credit('<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル</a>'),
+		minimumLevel: 2,
+		maximumLevel: 18
+		});
+	 const currentImage = viewer.scene.imageryLayers.addImageryProvider(imageProvider);		//国土地理院のレイヤーで表示する
+	localStorage.setItem( "bgSwFlg", "secium" );			// 次の起動時は背景をsecium画面にする
+}
+
+//							背景としてのsecium画面を消してiframe域をアクティブにする
+function cesiumOff() {
+	$("#cesiumContainer").css("display","none");
+	$("#scdl").css("display","none");
+	$("#ifrm").css("display","inline");
+}
+$(window).on("load resize", function() {
+//	var fullSW = window.screen.width==window.outerWidth;
+//	if ( fullSW ) {
+	if ( bgFlg==null || bgFlg=="secium" ) {
+		$("th").css("color", "white");
+		$("td").css("color", "white");
+	} else {
+		$("th").css("color", "black");
+		$("td").css("color", "black");
+	}
+});
+</script>
+</body>
+</html>
