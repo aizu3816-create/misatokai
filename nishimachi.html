@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<title>西町いさすみ会</title>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<style type="text/css">
+body {
+	padding: 0;  margin: 0;
+	width: 100%;   height: 100%;
+	background: #e5e5ff;
+	font: normal 1rem "メイリオ";
+	text-align: center;
+	justify-content: center;
+}
+#headArea {
+	text-align:center;
+	font: bold 1.5em "HG丸ｺﾞｼｯｸM-PRO";
+	color: red;
+	padding: 5px 0px;
+}
+#indexArea {
+	text-align:center;
+	margin: 10px 0 0 0;
+}
+input[type="button"] {
+	background: lightcyan;
+	border: 1px solid blue;
+	border-radius: 6px;
+	cursor: pointer;
+	padding: 3px 10px;
+	font: normal 0.9rem "メイリオ";
+}
+input[type="button"]:hover, #menu>li:hover {
+	background: lightgreen;
+}
+p {
+	font: normal 1.5em "メイリオ";
+	margin: 20px 50px;
+	text-indent: 1em;
+	text-align: left;
+}
+.small {
+	width: 400px;
+	margin-bottom: 10px;
+	border: solid 1px silver;
+	display: inline-block;
+	cursor: zoom-in;
+}
+.naka, .koma {
+	text-align: center;
+}
+.koma {
+	width: 400px;
+	margin-bottom: 10px;
+	border: solid 0px silver;
+	display: inline-block;
+	vertical-align: top;
+}
+figcaption {
+	font: normal 12px "メイリオ";
+	margin: -12px 0 0 0;
+}
+#full-screen-image {
+   display: none;
+   background: RGBA(0,0,0,.8) no-repeat center;
+   background-image: url();
+   background-size: contain;
+   width: 100%;
+   height: 100%;
+   position: fixed;
+   z-index: 10000;
+   top: 0;
+   left: 0;
+   cursor: zoom-out;
+}
+
+#full-screen-image.isFullScreen {
+   display: block;
+}
+</style>
+
+</head>
+<body>
+<div id="headArea">西町いさすみ会</div>
+<div class="indexArea">
+	<input type="button" onclick='sw("kaitowa");' value="西町いさすみ会とは">
+	<input type="button" onclick='sw("gakkou");'  value="西町小学校">
+	<input type="button" onclick='sw("suzuki1");' value="学童疎開(1)鈴木衞">
+	<input type="button" onclick='sw("suzuki2");' value="学童疎開(2)鈴木衞">
+	<input type="button" onclick='sw("hori");'    value="紅葉館の想い出 堀和正">
+	<input type="button" onclick='sw("album");'   value="思い出の写真">
+</div>
+<hr>
+<div id="full-screen-image" class=""></div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<< 西町いさすみ会とは >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<div id="kaitowa" style="display:none;">
+	<p>会津美里町（旧会津高田町）は昭和６１年１１月２１日に東京都台東区と友好都市提携を締結しました。<br>
+	　そのきっかけとなったのは、昭和19年に当時の下谷小学校と西町小学校の子どもたちが旧会津高田町に学童疎開したことに因ります。</p>
+	<p>会津美里会（旧ＴＲ会津高田会）が発足するときに、会津美里町出身者のみならず会津美里町に何らかの縁がある人々も会員として募ろうとなり、疎開経験がある方々にもお声掛けしました。</p>
+	<p>この方々は既に「西町いさすみ会」という会を結成されていましたが、会のお名前をそのまま頂戴して、会津美里会（旧ＴＲ会津高田会）に加入された会員の皆様を総称して西町いさすみ会員とお呼びするようになりました。</p>
+	</p>
+	<div class="naka"><figure><img src="img/nishimachi/総会2018.jpg" class="small"><figcaption>前列中央のお二人(中村太郎様、岸田清次様)</figcaption></figure></div>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<< 西町小学校 >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<div id="gakkou" style="display:none;">
+	<p><a href="https://amanaimages.com/info/infoMotionRM.aspx?SearchKey=15378000189" target="_blank">【東京都台東区立西町小学校】</a></p>
+	<p>ネットで調べましたが創立年は不明です。１９９８年（平成１０年）に上野小学校に統合され廃校となりました。<br>
+	　校舎のあったところの住所は台東区東上野２丁目で、現在は永寿総合病院となっています。</p>
+	<p>台東区の東上野区民館２階には校旗、校誌や写真、その他当時の資料が展示されています。</p>
+	<br>
+	<p><a href="https://sorosoro-shinbun.jimdofree.com/%E6%98%AD%E5%92%8C22%E5%B9%B4%E5%90%8C%E6%9C%9F%E5%8F%8B%E5%A5%BD%E4%BC%9A/" target="_blank">【会津高田へ集団疎開記録】</a></p>
+	<p>集団疎開「吉岡屋」前のただ１枚の写真。会津高田に着いて間もなくの頃か、ふっくらとした顔立ちの中で不安そうな顔々。西町、車坂のほか一部御徒町から浅草通り方面に住んでいた人たち。ほとんどの顔と姓名が一致しますが、今どれだけの人が生きているしょうか。前列右から５人目、身をかがめているのが私です。
+（鈴木　衞）</p>
+	<br>
+	<p>戦況が段々深刻になって昭和１９年(１９４４年)の夏に西町小学校児童(当時は国民学校)が福島県に疎開することになった。男子１９２名が会津高田に、女子は２０１名が会津東山に向かった。</p>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<< 学童疎開(1)鈴木衞 >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<div id="suzuki1" style="display:none;">
+	<p>◎会津高田　学童疎開(1)　鈴 木　衞
+	<p>私達の学年は昭和１６年に小学校が、「国民の錬成のため」国民学校と呼び名が改まり、その年の１２月に戦争が始まった。終戦は２０年夏、２年後の２２年に呼び名が戻された。正確に言うなら小学校で卒でなくて、国民学校卒と云う戦勝の申し子のような学年である。
+	<p>昭和１９年４年生の夏の盛りに、皇国民の３年生から６年生が、西町の校庭から福島県会津高田町に集団疎開として出発した。敗戦のちょうど１年前の８月１５日である。女子は会津若松の東山温泉に行った。縁故を頼って地方へ疎開した学童もいて、東京へ残った者はわずかだった。
+	<p>上野駅を出るまで家族大勢の見送りを受けて夜汽車に乗り、しばらくの間は賑やかに元気があった。酷暑のなか会津高田の駅に降りた時も、地元人々に歓迎された。養蚕が盛んで米どころでもある高田町は、会津盆地の要地で商人宿もあったらしい。
+	<p>西町国民学校の児童は紅葉館、平野屋、成り駒屋、吉岡家の４つに分かれた。起きると、布団の上に蚤が飛び跳ねているのに驚いたが、東北の寒い朝を迎える頃には食べ物が少なくなり、好きっ腹を抱えるようになった。食事は米にジャガイモや大根が混じり、後は薄い味噌汁に白菜の漬物だけの時もあった。行灯ひとつに四方八方から布団を寄せて暖をとり、授業も遠縁になった。(記憶がある)。
+	<p>親兄弟のいる東京へ帰りたい。年少者が布団に入ってからすすり泣くのを耳にしながら望郷の思いが募った。時折面会に来る親御さんをうらやみ、あくる年、卒業して東京に帰る六年生を送った。
+	<p>それから日を置かずに焼け出されて戻った卒業生から東京の惨状を聞き、深夜頭上に響く轟音が、新潟を襲うアメリカの爆撃機と知る。８月、玉音放送を聞いて終戦を知った。迎えに来る身内が相次ぎ、疎開児童が全員東京に戻ったのは、いつのことであろうか。立子山先生が「高田日誌」に、疎開から帰還まで、詳細を記している。
+	<p>それから４０年ばかり後、町合併３０周年記念として会津高田（今会津箕郷町）西町、下谷、入谷の各小学校の疎開児童が招かれた。台東区役所前からバスを連ねての盆踊りに加わる一泊旅行だった。町の大通りから会津総鎮守(伊佐須美神社」にかけて一万人が参加した夜祭は、お世話して頂いた恩愛を思い出させる一夜であった。
+	<p>これを機におのずと疎開を偲び親睦をはかる(西町いさすみ会)が生まれた。年月を経ると恩讐が彼方に去り、苦難の思いも軽くなる。
+</p>
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<< 学童疎開(2)鈴木衞 >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<div id="suzuki2" style="display:none;">
+	<p>◎会津高田　学童疎開 (2)　鈴 木　衞
+	<p>親元を離れて小学生の集団生活に襲ってくる空腹に蚤、しらみ。家に帰りたい思いを抑えて忍従の暮らし。４年の時の通信簿もなかったほど勉強もしなかった。母が残してくれた成績表はこの年だけない。こう書くと９～１０歳で味わった集団疎開は悲惨なものだった。
+	<p>しかし過ぎ去ってみると懐かしさもある。私たちが過ごした昭和の世は、来年の改元があるといよいよ遠くなる。天皇、皇后のお姿に畏れながら同年代の親しみを感じますが、高田日誌が記憶の中にだけ残るのも時世、時節かと思う。
+	<p>集団疎開に行く日、勤め人の父がめずらしく日本橋白木屋デパートで「欲しいものを買ってやる」と云い、びっくりしたが、もう子供が欲しいものが少なく「源平盛衰記」という薄い本１冊と、１から１５の小さな板を１６のコマに並べる「数字合わせ」だけを買ってもらった。
+	<p>学校から上野駅の改札を通るとき「まもる」と叫んだ父の声。持たされた財布に、いくらだかお札が入っていて、親戚の住所録を持たされてもいた。昭和１６年１２月８日朝、食卓の味噌汁から湯気が上がるなか、ラジオから甲高い声で開戦を報じていた。「これは大変な事なった」と言った父である。４人兄弟でただ１人疎開に行く９歳の子に、別れを告げた声ではなかったか。
+	<p>疎開列車は遠足気分で騒ぐだけだったが、夜が更けるにつれ静かになり、白河の手前栃木県「豊原」で薄明を迎えると、親元を離れた寂しさが大きくなった。それから1年「高田日誌」に記された月日を、時に家族の見舞いに涙し望郷の思いを抱いて送った。家が幸い焼けなかったが、日誌によると２０年８月２３日母と兄が迎えに来て家族の元に帰った。
+	<p>しかし降りると思った上野駅を通りすぎ、千葉県市川市下総中山駅まで行ったのには驚いた。秋葉原から総武線に乗ると一望焼野原だった。今の場所と線路をはさんで反対側にあった両国国技館が、空に生々しい残骸をさらけ出していたのが忘れられない。
+	<p>６年生の新学期、西町国民学校に戻った。町内や疎開した友達も温かく迎えてくれた。さっそく野球仲間に入って担任の青柳先生に教わった。黒門国民学校に勝ち、後楽園球場と神宮球場の試合観戦にも連れて行っていただき、さらに旧制中学入学試験の補習もした。旧制中学の方は六三三の新制となって受験できなかったが、野球の方は高校球児として社会人になってから草野球、それが次男を通じて高１の孫まで、今に受け継がれている。１年生から３年生までは、温厚にして厳しい上田平作先生。そのお顏と言葉の端々をいまも覚えている。その後小学校のこのお２人のほかに記憶している先生、教授はいない。立子山先生のみ、日誌を通じてその姿と口調を頭に留めている。
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<< 紅葉館の想い出 堀和正 >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<div id="hori" style="display:none;">
+	<p>◎ 会津高田　紅葉館の想い出　 堀　和 正
+	<p>何が何でもひもじい思いをしたのが一番。でも当時とすれば、食糧事情は良い方だったとか。上級生と共に荷車で買い出しにいったり、個人的にこっそりと食べ物を戴いた時の喜びは、今でも忘れることは出来ません。こっそりと味わって食べたものです。
+	<p>紅葉館に到着したその晩は、２階に上がってすぐ左側の布団部屋に配属され、持参した金属製の食器で食事をしたが、当時の歌ではないけれど、金の茶碗に金の箸、一善飯とは情けないの通り、夕闇迫るとやけに家が恋しくなって、こんな侘しい気持ちを抱いたのも初めてで、そっと涙で枕を濡らしました。寝小便で布団を濡らしたり、シラミ大臣の称号を授からない迄も、シラミ、のみ、そしてカイセンには泣きました。疎開が終ってからも暫くは医者通いをしました。
+	<p>戦時中のことですから、学校教育も軍隊式で、加藤先生には良く怒られ、上級生には往復ビンタを食い、訳の解らぬお説教の毎日、可愛がってくれるのは結構だが、急所にぎりをやられたり、挙句の果てはキンカンを塗られて飛び上がったり、大変な騒ぎでした。
+	<p>その後、上級生の帰郷と加藤先生の出世で、いくらかホッとしたものです。どんな時でも、我々の味方は母親以上に面倒を見てくれた寮母さんに甘えるのが、一番の安らぎでした。恐ろしい事もありました。私の部屋は二階のすぐ右側の部屋で、風呂場の真上の本館の屋根続きのボロ部屋でした。その時は２０年ぶりの大雪とかで、二階から出入りした位の雪の多い年で、その重みで部屋が一瞬の内に押しつぶされたのです。幸いその時、誰も居合わせなかったので、命拾いをしましたが、今考えるとゾッとする出来事でした。
+	<p>話は変わりますが、演芸会もよくやりましたね。なんといっても、保泉君の「九段の母」が最高でした。他に桃太郎、マレイのハリマオ等も記憶に有ります。
+	<p>扨て、此処まで思い出すままに綴って来ましたが、今となっては全てが楽しい想い出と変わって、又と味会うことのできない少年の頃の貴重な体験は、人生の宝物として自分の中で今でも息づいているのを感じます。会津高田の皆様、紅葉館さん、有り難う御座いました。
+</div>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<< 思い出の写真 >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<div id="album" style="display:none;">
+	<div class="koma"><figure><img src="img/nishimachi/伊佐須美神社昭和19年.jpg" class="small">
+		<figcaption>昭和１９年 伊佐須美神社にて</figcaption></figure>
+	</div>
+	<div class="koma"><figure><img src="img/nishimachi/吉岡屋.jpg" class="small">
+		<figcaption>吉岡屋に疎開した方々</figcaption></figure>
+	</div>
+	<div class="koma"><figure><img src="img/nishimachi/成駒屋.jpg" class="small">
+		<figcaption>成駒屋に疎開した方々</figcaption></figure>
+	</div>
+	<div class="koma"><figure><img src="img/nishimachi/西町小学校校歌.jpg" class="small">
+		<figcaption>西町小学校の校歌の碑</figcaption></figure>
+	</div>
+	<div class="koma"><figure><img src="img/nishimachi/西町小学校之跡.jpg" class="small">
+		<figcaption></figcaption>永寿総合病院敷地内にある西町小学校の碑</figure>
+	</div>
+	<br>
+	<p style="font-size:14px;">西町いさすみ会に関する写真、映像や画像等ホームページに載せてもよいのがありましたら、お近くの会津美里会役員までご連絡ください。</p>
+</div>
+<script type="text/javascript">
+$(function($) {
+	sw("kaitowa");
+});
+
+function sw(menu){
+	switch (menu) {
+		case "kaitowa":	allclose();		$("#kaitowa") .css("display", "inline");		break;
+		case "gakkou":	allclose();		$("#gakkou")  .css("display", "inline");		break;
+		case "suzuki1":	allclose();		$("#suzuki1") .css("display", "inline");		break;
+		case "suzuki2":	allclose();		$("#suzuki2") .css("display", "inline");		break;
+		case "hori":	allclose();		$("#hori")    .css("display", "inline");		break;
+		case "album":	allclose();		$("#album")   .css("display", "inline");		break;
+	}
+}
+function allclose() {
+	$("#kaitowa") .css("display", "none");
+	$("#gakkou")  .css("display", "none");
+	$("#suzuki1") .css("display", "none");
+	$("#suzuki2") .css("display", "none");
+	$("#hori")    .css("display", "none");
+	$("#album")   .css("display", "none");
+}
+
+$('.small').click(function () {
+	var src = $(this).attr('src');
+	src = src.replace( "s.jpg", ".jpg" );			// 拡大用のファイル名に変換
+	src = src.replace( "__s", "" );				// 拡大用のファイル名に変換
+	var url = "url" + "(" + src + ")";
+	$('#full-screen-image').addClass('isFullScreen');
+	$('#full-screen-image').css('background-image', url);
+});
+$('#full-screen-image').click(function () {
+	$(this).removeClass('isFullScreen');
+});
+</script>
+</body>
+</html>
