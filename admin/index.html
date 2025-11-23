@@ -1,0 +1,114 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="utf-8">
+<title>管理者機能</title>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style type="text/css">
+body {
+	margin: 0;  padding: 0;
+	width: 100%; height: 100%;
+	display: grid;
+	grid-template:
+		"menu"  27px
+		"cnvs"  1fr/
+		 1fr;
+	justify-content: center;
+}
+#menu { grid-area: menu;  justify-self: center;  background: lightgreen;}
+#cnvs { grid-area: cnvs;  justify-self: center; }
+#main {
+	margin: 0;  padding: 0;
+	width: 100%; height: 100%;
+}
+.menuBtn{
+	margin-left: 2px;
+	padding: 4px;
+	background-color: ButtonFace;
+	border: 1px solid gray;
+	border-radius: 5px 5px 0 0;
+	font-size: 12px;
+	font-family: "ＭＳ ゴシック";
+	text-decoration: none;
+	display: none;
+	height: 24px;
+}
+.menuBtn:hover {
+	background-color: forestgreen;
+	color: white;
+}
+#title	{
+	font: bold 18px "ＭＳ ゴシック";
+	color: blue;
+	margin: 0 10px 0 20px;
+}
+#menu, #main {
+	width: 100vw;
+	height: 100%;
+}
+</style>
+</head>
+<body oncontextmenu="return false;">
+<div id="cnvs">
+	<iframe src="" name="main" id="main" oncontextmenu="return false;"></iframe>
+</div>
+<div id="dlg_pwdCheck" style="text-align:center;">
+		管理者用パスワード
+		<input id="pwd" type="password" size="10" vallue="">
+		<input type="button" value="？" onclick="pwdOnOff();" style="font-size:12px;">
+		<hr>
+		<input type="button" value="ログイン" onclick="loginPswdCheck();" autofocus id="loginBtn">　　
+		<input type="button" value="キャンセル" onclick="window.close()">
+</div>
+<script>
+$( "#dlg_pwdCheck" ).dialog({
+	autoOpen: false,
+	title: 'ログイン',
+	modal: true,
+	width: 350,
+});
+var diffDays = lastLoginDateCheck();
+if ( diffDays <= 30 ) {
+	window.open("kaiin.html", "_self");
+} else if ( diffDays <= 90 ) {
+	var obj = { 'id' : 'yourPswd', }
+	$.post('../misato.php', obj, function(rc) {
+		$("#pwd").val(rc);
+	});
+	$("#dlg_pwdCheck").dialog( "open" );
+} else {
+	$("#pwd").val("");
+	$("#dlg_pwdCheck").dialog( "open" );
+}
+
+function lastLoginDateCheck() {
+	var ymdLast = localStorage.getItem('misatokaiLoginTime');
+	if ( ymdLast == null ) { ymdLast = "1900/01/01"; }
+	ymdLast = new Date(ymdLast);
+	var today = new Date();
+	var diffMiliSec = today.getTime() - ymdLast.getTime();
+	var diffDays = Math.floor(diffMiliSec / (1000 * 60 * 60 * 24));
+	console.log(today, ymdLast, diffDays);
+	return diffDays;
+}
+function loginPswdCheck() {
+	var pwd = $("#pwd").val();
+	if ( pwd == "zxcv" ) {
+		var thisTime = new Date();
+		localStorage.setItem('misatokaiLoginTime', thisTime);
+		$("#dlg_pwdCheck").dialog( "close" );
+		$(".menuBtn").css("display", "inline");
+		window.open("kaiin.html", "_self");
+	} else {
+		alert("パスワードが正しくありません。");
+	}
+}
+function pwdOnOff() {
+	( $("#pwd").attr("type") == "password" ) ? $("#pwd").attr("type", "text") : $("#pwd").attr("type", "password");
+	$("#loginBtn").focus();
+}
+</script>
+</body>
+</html>

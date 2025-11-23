@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+<title>会員管理</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>		<!--   dialog   -->
+<link  href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+<script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css" rel="stylesheet">
+<style type="text/css">
+body {
+	font: normal 14px "メイリオ";
+	margin: 0;  padding: 0;
+	width: 100%; height: 100%;
+	display: grid;
+	grid-template:
+		"left right"  1fr/
+		 135px 1fr;
+	grid-template-columns: max-content, max-content;
+	justify-content: center;
+}
+#left_frame  { grid-area: left;   background: lightyellow; }
+#right_frame { grid-area: right; }
+input[type="button"] {
+	border: 1px solid blue;
+	border-radius: 6px;
+	cursor: pointer;
+}
+input[type="button"]:hover {
+	background: lightgreen;
+}
+table,th,td  { border-collapse: collapse;  border: 1px solid gray;  margin: 0 auto; }
+#aiuT td     { padding: 0px 4px;  font-size: 15px; }
+#namT td     { font-size: 15px; }
+td:hover     { background: lightgreen;  cursor: pointer; }
+.naka        { text-align: center; }
+.w1 { width: 60px }
+.w2 { width: 80px }
+.w3 { width: 120px }
+.w4 { width: 200px }
+.w5 { width: 300px }
+.w6 { width: 350px }
+.w7 { width: 445px }
+.wkDialogClass .ui-dialog-titlebar {
+    color:black;
+    background:plum;
+    height: 19px;
+    font-size: 15px;
+}
+.wkDialogClass .ui-dialog-buttonpane {
+    height: 28px;
+    margin: 0;
+}
+.wkBtn {
+    color:black;
+    background:plum;
+    height: 26px;
+    font-size: 14px;
+    padding: 0 10px;
+}
+</style>
+<script>
+</script>
+</head>
+<body>
+<div id="left_frame">
+	<div id="aiuList">
+		<div id="aiueo"></div>
+		<input type="radio" name="taikaiYN" value=1 onclick="aiuClicked('ALL');" checked="checked">会員のみ表示<br>
+		<input type="radio" name="taikaiYN" value=2 onclick="aiuClicked('ALL');">非会員も表示<br>
+<!--		<input type="button" value="あ～ん 全員を表示" onclick="aiuClicked('ALL');">	-->
+		<hr>
+		<input type="button" value="役員を表示" onclick="aiuClicked('YAKUIN');">
+		<input type="button" value="西町いさすみ会会員" onclick="aiuClicked('NISHI');">
+		<input type="button" value="広報みさと対象者" onclick="aiuClicked('KOOHOO');">
+		<hr>
+		<input type="button" value="EXCEL出力" onclick="excelOut();"><br>
+		<div id="kaihiYY"></div>
+	</div>
+	<input type="button" value="AC" onclick="window.open('accessData.html');" style="position:absolute; bottom:0; left:5px;"><br>
+</div>
+<div id="right_frame"></div>
+<div id="dlg">
+	会員区分　<select id="kubun" name="kubun">
+		<option value="">会員</option>
+		<option value="非">非会員</option>
+		<option value="未">未加入</option>
+		</select>
+	<input type="text" id="seqid" class="w1" disabled style="float:right;"><br>
+	広報みさと<select id="kouhou" name="kouhou"><option value="○">発送対象者</option><option value="">非対象者</option></select><br>
+	姓名<input type="text" id="sei" class="w1">
+		<input type="text" id="mei" class="w1">
+	　　<input type="text" id="seiMei" disabled class="w3"><br>
+	よみ<input type="text" id="seiYomi" class="w1">
+		<input type="text" id="meiYomi" class="w1">
+	　　旧姓<input type="text" id="oldName" class="w1">
+	性別<select id="sex" name="sex"><option value="男">男</option><option value="女">女</option></select><br>
+	出身<input type="text" id="shusshin" class="w2"><br>
+	役職<select id="yakushoku" name="yakushoku">
+		<option value=""></option>
+		<option value="会長">会長</option>
+		<option value="副会長">副会長</option>
+		<option value="幹事長">幹事長</option>
+		<option value="副幹事長">副幹事長</option>
+		<option value="会計幹事">会計幹事</option>
+		<option value="監査幹事">監査幹事</option>
+		<option value="幹事">幹事</option>
+		<option value="相談役">相談役</option>
+		</select><br>
+	郵便番号<input type="text" id="zip" name="zip" class="w2" onKeyUp="AjaxZip3.zip2addr('zip','','pref','city','town');">
+			<input type="text" id="addr" disabled class="w6"><br>
+	都道府県<input type="text" id="pref" name="pref" class="w2"><br>
+	市区町村<input type="text" id="city" name="city" class="w4"><br>
+	町域　　<input type="text" id="town" name="town" class="w4"><br>
+	地番　　<input type="text" id="banchi" class="w5"><br>
+	建物等　<input type="text" id="tatemono" class="w5"><br>
+	電話番号<input type="text" id="tel" class="w3"><br>
+	携帯電話<input type="text" id="tel2" class="w3"><br>
+	mail　　<input type="text" id="mail" class="w5"><br>
+	紹介者　<input type="text" id="shoukai" class="w4"><br>
+	入会日　<input type="date" id="YMDnyuukai"><br>
+	退会日　<input type="text" id="YMDtaikai" class="w4"><br>
+	会費納入<input type="text" id="kaihi" class="w7"><br>
+	<span style="vertical-align:top;">備考　　</span><textarea id="memo" rows="5" cols=50"></textarea><br>
+	<span style="vertical-align:top;">変更履歴</span><textarea id="updt" rows="3" cols=50"></textarea>
+</div>
+
+<script>
+
+function mobileChk(){
+  var regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
+  var isMobileByUa = regex.test(navigator.userAgent);;
+  var isMobileByClientHint = navigator.userAgentData && navigator.userAgentData.mobile;
+  return isMobileByClientHint || isMobileByUa;
+}
+var devType = mobileChk();
+if ( devType ) {
+	var mobileW = window.innerWidth;	// PC
+} else {
+	var mobileW = 768;					// mobile device
+}
+var screenW = window.innerWidth;
+function dispNameList() {
+	var aiu = ["あ","い","う","え","お","か","き","く","け","こ","が","ぎ","ぐ","げ","ご","さ","し","す","せ","そ","ざ","じ","ず","ぜ","ぞ","た","ち","つ","て","と","だ","ぢ","づ","で","ど","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ","ば","び","ぶ","べ","ぼ","ぱ","ぴ","ぷ","ぺ","ぽ","ま","み","む","め","も","や","","ゆ","","よ","ら","り","る","れ","ろ","わ","ゐ","","ゑ","を","ん","","","","" ];
+	var aiu_len = aiu.length;
+	var t = "<table id='aiuT'>";
+	var obj = {};
+	obj['id'] = 'select';
+	obj['db'] = 'misato.db';
+	obj['sql'] = 'select * from kaiin group by substr(姓よみ,1,1) order by substr(姓よみ,1,1);';
+	$.post('../misato.php', obj, function(rs) {
+	var data = JSON.parse(rs);
+		var dataN = data.length;
+		for ( var i = 0; i < aiu_len; i++ ) {
+			if ( i % 5 == 0 ) { t += "<tr>"; }
+			var flg = "N";
+			var aa = aiu[i];
+			for ( var p = 0; p < dataN; p++ ) {
+				if ( data[p]['姓よみ'].substr(0,1) == aa ) { flg = "Y"; }
+			}
+			if ( flg == "N" ) {
+				t += "<td style='font-size:11px; color:darkgray'>" + aa;
+			} else {
+				t += "<td style='font-weight:bold;' onclick='aiuClicked(" + '"' + aa + '")' + "'>" + aa;
+			}
+		}
+		t += "</table>";
+		$("#aiueo").html(t);
+		var ymd = new Date();
+		var yy = ymd.getFullYear();
+		var s = '<select id="dispNN">';
+		for ( var y = Number(yy); y>=2008; y-- ) {
+			s += `<option value="${y}">${y}</option>`;
+		}
+		s += "</select>";
+		s += '<input type="button" value="以降納入者" onclick="dispRireki();"><br>';
+		$("#kaihiYY").html(s);
+	});
+}
+function aiuClicked(s) {
+	var yn = $('input[name=taikaiYN]:checked').val() ;
+	if ( ! yn ) { yn = 1; }
+	var yyyy = today();
+	yyyy = yyyy.substr(0, 4);
+	var obj = {};
+	obj['id'] = 'select';
+	obj['db'] = 'misato.db';
+	switch (s) {
+		case "ALL":		obj['sql'] = "select * from kaiin order by 姓よみ,名よみ;";  break;
+		case "YAKUIN":	obj['sql'] = "select * from kaiin where 役職!='' and 役職!='西町いさすみ会' order by 姓よみ,名よみ;";  break;
+		case "NISHI":	obj['sql'] = "select * from kaiin where 役職='西町いさすみ会' order by 姓よみ,名よみ;";   yn = 2;  break;
+		case "KOOHOO":	obj['sql'] = "select * from kaiin where 広報みさと発送者='○' order by 姓よみ,名よみ;";  break;
+		default:		obj['sql'] = "select * from kaiin where substr(姓よみ,1,1)='" + s + "' order by 姓よみ,名よみ;";
+	}
+	var flg = s;
+	$.post('../misato.php', obj, function(rs) {
+		var data = JSON.parse(rs);
+		if ( flg == "YAKUIN" ) {
+			var t = "<table id='namT'><thead><tr><th>No<th>役職<th>名前<th>〒<th>住所<th>電話番号<th>メール<th>履歴<th>広報<th>備考";
+			if ( screenW <= mobileW ) { var t = "<table id='namT'><thead><tr><th>No<th>役職<th>名前"; }
+		} else {
+			var t = "<table id='namT'><thead><tr><th>No<th>名前<th>〒<th>住所<th>電話番号<th>メール<th>履歴<th>広報<th>備考";
+			if ( screenW <= mobileW ) { var t = "<table id='namT'><thead><tr><th>No<th>名前"; }
+		}
+		t += "</thead>";
+		var no = 0;
+		for ( var i = 0; i < data.length; i++ ) {
+			if ( ( yn == 1 && data[i]['会員区分'] == "非") ) { continue; }
+			var sid = data[i]["seq_id"];
+			if ( data[i]['会員区分'] == "非" ) {
+				var nam = "<span style='color:lightslategray;font-size:12px'>" + data[i]["姓"] + " " + data[i]["名"] + "</span>";
+			} else {
+				var nam = "<span style='font:bold 14px メイリオ'>" + data[i]["姓"] + " " + data[i]["名"] + "</span>";
+			}
+			no ++;
+			t += "<tr onclick='nameClicked(" + sid + ");'>";
+			t += "<td class='naka'>" + String(no);
+			if ( flg == "YAKUIN" ) { t += "<td>" + data[i]['役職']; }
+			t += "<td>" + nam;
+			if ( screenW > mobileW ) {
+				t += "<td>" + data[i]["郵便番号"] + "<td>" + data[i]["市区町村"] + data[i]["町域"] + data[i]["地番"] + " " + data[i]["建物等"];
+			}
+			if ( data[i]["電話番号"].length < 1 ) {
+				if ( screenW > mobileW ) {
+					t += "<td>" + data[i]["携帯電話"] + "<td>" + data[i]["mail"];
+				} else {
+//					t += "<td>" + data[i]["携帯電話"] + "<br>" + data[i]["mail"];
+				}
+			} else {
+				if ( screenW > mobileW ) {
+					t += "<td>" + data[i]["電話番号"] + "<br>" + data[i]["携帯電話"];
+					t += "<td>" + data[i]["mail"];
+				} else {
+//					t += "<td>" + data[i]["電話番号"] + "　" + data[i]["携帯電話"]+ "<br>" + data[i]["mail"];
+				}
+			}
+			if ( screenW > mobileW ) {
+				var s = data[i]["会費納入履歴"];
+//				if ( s.length > 20 ) { s = s.substr(0, 20) + " …"; }
+				var bclr = "";
+				if ( (s.length >= 4 && s.substr(0,4) != yyyy) || s.length == 0 ) { bclr = " style='background:lightgray;'"; }
+				t += "<td" + bclr + ">" + s + "<td class='naka'>" + data[i]["広報みさと発送者"] + "<td style='max-width:250px;'>" + data[i]["備考"];
+			}
+		}
+		if ( screenW > mobileW ) {
+			t += "<tr><td class='naka'>-<td class='naka'>-<td class='naka'>-<td class='naka'>-<td class='naka'>-<td class='naka'>-<td style='background:lightgray;'>" + yyyy + "年会費未納<td class='naka'>-<td class='naka'>-";
+		}
+		t += "</table>";
+		$("#right_frame").html(t);
+		$('#namT').tablesorter();
+	});
+}
+// ===============================================================================  nameClicked(dialog)
+function nameClicked(seqid) {
+	var obj = {};
+	obj['id'] = 'select';
+	obj['db'] = 'misato.db';
+	obj['sql'] = 'select * from kaiin where seq_id=' + seqid + ';';
+	$.post('../misato.php', obj, function(rs) {
+		var data = JSON.parse(rs);
+		$("#kubun")     .val( data[0]['会員区分'] );;
+		$("#kouhou")    .val( data[0]['広報みさと発送者'] );
+		$("#seqid")     .val( data[0]['seq_id'] );
+		$("#sei")       .val( data[0]['姓'] );
+		$("#mei")       .val( data[0]['名'] );
+		$("#seiMei")    .val( data[0]['姓'] + " " + data[0]['名'] );
+		$("#sex")       .val( data[0]['性別'] );
+		$("#seiYomi")   .val( data[0]['姓よみ'] );
+		$("#meiYomi")   .val( data[0]['名よみ'] );
+		$("#oldName")   .val( data[0]['旧姓'] );
+		$("#shusshin")  .val( data[0]['出身'] );
+		$("#yakushoku") .val( data[0]['役職'] );
+		$("#zip")       .val( data[0]['郵便番号'] );
+		$("#pref")      .val( data[0]['都道府県'] );
+		$("#city")      .val( data[0]['市区町村'] );
+		$("#town")      .val( data[0]['町域'] );
+		$("#banchi")    .val( data[0]['地番'] );
+		$("#tatemono")  .val( data[0]['建物等'] );
+		$("#addr")      .val( data[0]['市区町村']+data[0]['町域']+data[0]['地番']+" "+data[0]['建物等'] );
+		$("#tel")       .val( data[0]['電話番号'] );
+		$("#tel2")      .val( data[0]['携帯電話'] );
+		$("#mail")      .val( data[0]['mail'] );
+		$("#shoukai")   .val( data[0]['紹介者'] );
+		var ymd = data[0]['入会日'].replace( "/", "-" );
+		var ymd = ymd.replace( "/", "-" );
+		$("#YMDnyuukai").val( ymd );
+		$("#YMDtaikai") .val( data[0]['退会日'] );
+		$("#kaihi")     .val( data[0]['会費納入履歴'] );
+		$("#memo")      .val( data[0]['備考'] );
+		$("#updt")      .val( data[0]['変更履歴'] );
+		var iro ="red";
+		if ( $("#kubun").val() == "" ) {iro = "black"; }
+		$(".ui-dialog-titlebar").css("color", iro);
+		$("#dlg").dialog("option", "title", data[0]['姓'] + " " + data[0]['名']);
+		$("#dlg").dialog("open");
+	});
+}
+// ===============================================================================  以降納入者
+function dispRireki() {
+	var yTbl = [];
+	var yy = $("#dispNN").val();
+	var yyyy = today();
+	yyyy = yyyy.substr(0, 4);
+	while ( yyyy >= yy ) {
+		yTbl.push( yyyy.substr(0, 4) );
+		yyyy = String ( Number(yyyy) - 1 );
+	}
+
+	var yyyy = today();
+	yyyy = yyyy.substr(0, 4);
+	var obj = {};
+	obj['id'] = 'select';
+	obj['db'] = 'misato.db';
+	obj['sql'] = "select * from kaiin order by 姓よみ,名よみ;";
+	$.post('../misato.php', obj, function(rs) {
+		var data = JSON.parse(rs);
+		var t = "<table id='namT'><thead><tr><th>No<th>名前<th>〒<th>住所<th>電話番号<th>メール<th>履歴<th>広報<th>備考";
+		t += "</thead>";
+		var no = 0;
+		for ( var i = 0; i < data.length; i++ ) {
+			var s = data[i]["会費納入履歴"];
+			var flg = "N";
+			for ( var y = 0; y < yTbl.length; y++ ) {
+				if ( s.indexOf( yTbl[y] ) >= 0 ) {
+					flg = "Y";
+					break;
+				}
+			}
+			if ( flg == "N" ) { continue; }
+			no ++;
+			if ( data[i]['会員区分'] == "非" ) {
+				var nam = "<span style='color:lightslategray;font-size:12px'>" + data[i]["姓"] + " " + data[i]["名"] + "</span>";
+			} else {
+				var nam = "<span style='font:bold 14px メイリオ'>" + data[i]["姓"] + " " + data[i]["名"] + "</span>";
+			}
+			t += "<tr onclick='nameClicked(" + data[i]["seq_id"] + ");'>";
+			t += "<td class='naka'>" + String(no);
+			t += "<td>" + nam;
+			t += "<td>" + data[i]["郵便番号"] + "<td>" + data[i]["市区町村"] + data[i]["町域"] + data[i]["地番"] + " " + data[i]["建物等"];
+			if ( data[i]["電話番号"].length < 1 ) {
+				t += "<td>" + data[i]["携帯電話"];
+			} else {
+				t += "<td>" + data[i]["電話番号"] + "<br> " + data[i]["携帯電話"];
+			}
+			t += "<td>" + data[i]["mail"];
+			var s = data[i]["会費納入履歴"];
+			if ( s.length > 40 ) { s = s.substr(0, 40) + " …"; }
+			var bclr = "";
+			if ( (s.length >= 4 && s.substr(0,4) != yyyy) || s.length == 0 ) { bclr = " style='background:lightgray;'"; }
+			t += "<td" + bclr + ">" + s + "<td class='naka'>" + data[i]["広報みさと発送者"] + "<td style='max-width:250px;'>" + data[i]["備考"];
+		}
+		t += "<tr><td class='naka'>-<td class='naka'>-<td class='naka'>-<td class='naka'>-<td class='naka'>-<td class='naka'>-<td style='background:lightgray;'>" + yyyy + "年会費未納<td class='naka'>-<td class='naka'>-";
+		t += "</table>";
+		$("#right_frame").html(t);
+		$('#namT').tablesorter();
+	});
+}
+// ===============================================================================  excelOut
+function excelOut() {
+	var ymd = today();
+	ymd = ymd.replace('/', '').replace('/', '');
+	var excelFile = '会津美里会' + ymd + '.xlsx';
+	var elt = document.querySelector("#namT");
+//	var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+	var wb = XLSX.utils.table_to_book(elt, {sheet:ymd});
+	XLSX.writeFile(wb, excelFile);
+}
+// ===============================================================================  add
+function add() {
+	var name1 = $("#seiYomi").val();
+	name1 = name1.substr( 0,1 );
+	var sql = 'insert into kaiin(会員区分,広報みさと発送者,姓,名,姓よみ,名よみ,旧姓,出身,性別,役職,郵便番号,都道府県,市区町村,町域,地番,建物等,電話番号,携帯電話,mail,紹介者,入会日,退会日,会費納入履歴,備考,変更履歴) values(';
+	sql +=  "'" + $("#kubun")     .val() + "'";
+	sql += ",'" + $("#kouhou")    .val() + "'";
+	sql += ",'" + $("#sei")       .val() + "'";
+	sql += ",'" + $("#mei")       .val() + "'";
+	sql += ",'" + $("#seiYomi")   .val() + "'";
+	sql += ",'" + $("#meiYomi")   .val() + "'";
+	sql += ",'" + $("#oldName")   .val() + "'";
+	sql += ",'" + $("#shusshin")  .val() + "'";
+	sql += ",'" + $("#sex")       .val() + "'";
+	sql += ",'" + $("#yakushoku") .val() + "'";
+	sql += ",'" + $("#zip")       .val() + "'";
+	sql += ",'" + $("#pref")      .val() + "'";
+	sql += ",'" + $("#city")      .val() + "'";
+	sql += ",'" + $("#town")      .val() + "'";
+	sql += ",'" + $("#banchi")    .val() + "'";
+	sql += ",'" + $("#tatemono")  .val() + "'";
+	sql += ",'" + $("#tel")       .val() + "'";
+	sql += ",'" + $("#tel2")      .val() + "'";
+	sql += ",'" + $("#mail")      .val() + "'";
+	sql += ",'" + $("#shoukai")   .val() + "'";
+	var ymd = $("#YMDnyuukai").val();
+	ymd = ymd.replace( /-/g, "/" );
+	sql += ",'" + ymd + "'";
+	sql += ",'" + $("#YMDtaikai") .val() + "'";
+	sql += ",'" + $("#kaihi")     .val() + "'";
+	sql += ",'" + $("#memo")      .val() + "'";
+	sql += ",'" + $("#updt")      .val() + "'";
+	sql += ');';
+	var obj = {};
+	obj['id'] = 'exec';
+	obj['db'] = 'misato.db';
+	obj['sql'] = sql;
+	$.post('../misato.php', obj, function(rs) {
+		$("#dlg").dialog("close");
+		aiuClicked(name1);
+	});
+}
+// ===============================================================================  clr
+function clr() {
+		$("#kubun")     .val("未");;
+		$("#kouhou")    .val("");
+		$("#seqid")     .val("");
+		$("#sei")       .val("");
+		$("#mei")       .val("");
+		$("#seiMei")    .val("");
+		$("#sex")       .val("");
+		$("#seiYomi")   .val("");
+		$("#meiYomi")   .val("");
+		$("#oldName")   .val("");
+		$("#shusshin")  .val("");
+		$("#yakushoku") .val("");
+		$("#zip")       .val("");
+		$("#pref")      .val("");
+		$("#city")      .val("");
+		$("#town")      .val("");
+		$("#banchi")    .val("");
+		$("#tatemono")  .val("");
+		$("#addr")      .val("");
+		$("#tel")       .val("");
+		$("#tel2")      .val("");
+		$("#mail")      .val("");
+		$("#shoukai")   .val("");
+		$("#YMDnyuukai").val("");
+		$("#YMDtaikai") .val("");
+		$("#kaihi")     .val("");
+		$("#memo")      .val("");
+		$("#updt")      .val("");
+}
+// ===============================================================================  del
+function del() {
+	if ( ! confirm("削除してもいいですか？") ) { return; }
+	var sid =  $("#seqid").val();
+	var name1 = $("#seiYomi").val();
+	name1 = name1.substr(0,1);
+	var obj = {};
+	obj['id'] = 'exec';
+	obj['db'] = 'misato.db';
+	obj['sql'] = "delete from kaiin where seq_id=" + sid + ";";
+	$.post('../misato.php', obj, function(rs) {
+		$("#dlg").dialog("close");
+		aiuClicked(name1);
+	});
+}
+// ===============================================================================  rep
+function rep() {
+	var sql = "update kaiin set ";
+	var sid =  $("#seqid").val();
+	var name1 = $("#seiYomi").val();
+	name1 = name1.substr(0,1);
+	sql +=  "会員区分='" + $("#kubun")     .val() + "'";
+	sql += ",広報みさと発送者='" + $("#kouhou")    .val() + "'";
+	sql += ",姓='" + $("#sei")       .val() + "'";
+	sql += ",名='" + $("#mei")       .val() + "'";
+	sql += ",姓よみ='" + $("#seiYomi")   .val() + "'";
+	sql += ",名よみ='" + $("#meiYomi")   .val() + "'";
+	sql += ",旧姓='" + $("#oldName")   .val() + "'";
+	sql += ",出身='" + $("#shusshin")  .val() + "'";
+	sql += ",性別='" + $("#sex")       .val() + "'";
+	sql += ",役職='" + $("#yakushoku") .val() + "'";
+	sql += ",郵便番号='" + $("#zip")       .val() + "'";
+	sql += ",都道府県='" + $("#pref")      .val() + "'";
+	sql += ",市区町村='" + $("#city")      .val() + "'";
+	sql += ",町域='" + $("#town")      .val() + "'";
+	sql += ",地番='" + $("#banchi")    .val() + "'";
+	sql += ",建物等='" + $("#tatemono")  .val() + "'";
+	sql += ",電話番号='" + $("#tel")       .val() + "'";
+	sql += ",携帯電話='" + $("#tel2")      .val() + "'";
+	sql += ",mail='" + $("#mail")      .val() + "'";
+	sql += ",紹介者='" + $("#shoukai")   .val() + "'";
+	var ymd = $("#YMDnyuukai").val();
+	ymd = ymd.replace( /-/g, "/" );
+	sql += ",入会日='" + ymd + "'";
+	sql += ",退会日='" + $("#YMDtaikai") .val() + "'";
+	sql += ",会費納入履歴='" + $("#kaihi")     .val() + "'";
+	sql += ",備考='" + $("#memo")      .val() + "'";
+	sql += ",変更履歴='" + $("#updt")      .val() + "'";
+	sql += " where seq_id=" + sid + ";";
+	var obj = {};
+	obj['id'] = 'exec';
+	obj['db'] = 'misato.db';
+	obj['sql'] = sql;
+	$.post('../misato.php', obj, function(rs) {
+		$("#dlg").dialog("close");
+		aiuClicked(name1);
+	});
+}
+// ===============================================================================  today
+function today() {
+	var date = new Date();
+	var ymdhms = date.getFullYear()
+	+ '/' + ('0' + (date.getMonth() + 1)).slice(-2)
+	+ '/' + ('0' + date.getDate()).slice(-2);
+//	+ ' ' + ('0' + date.getHours()).slice(-2)
+//	+ ':' + ('0' + date.getMinutes()).slice(-2)
+//	+ ':' + ('0' + date.getSeconds()).slice(-2)
+//	+ '.' + ('000'+date.getMilliseconds()).slice(-3);
+	return ymdhms;
+}
+// ===============================================================================  臨時処理
+function map() {
+	var zip = $("#zip").val();;		// 郵便番号
+	var adr = $("#city").val();		// 市区町村
+	adr +=    $("#town").val();		// 町域
+	adr +=    $("#banchi").val();		// 地番
+	window.open("https://www.google.co.jp/maps/place/〒" + zip + " " + adr);
+}
+// ===============================================================================  初期設定
+$(function(){
+	dispNameList();
+	aiuClicked('ALL');
+});
+$("#dlg").dialog({
+	dialogClass:"wkDialogClass",
+	autoOpen: false,
+	width: 550,
+	modal: true,
+	buttons: [
+		{ text: '閉じる',  class: 'wkBtn', click:  function() {$(this).dialog("close"); } },
+		{ text: '変更',    class: 'wkBtn', click:  function() {rep(); } },
+		{ text: '追加',    class: 'wkBtn', click:  function() {add(); } },
+		{ text: 'クリア',  class: 'wkBtn', click:  function() {clr(); } },
+		{ text: '削除',    class: 'wkBtn', click:  function() {del(); } },
+		{ text: 'MAP',     class: 'wkBtn', click:  function() {map(); } }
+	]
+});
+</script>
+</body>
+</html>
