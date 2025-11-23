@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>啓明国民学校</title>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<style type="text/css">
+body {
+	width: 100%;	height: 100%;
+	justify-content: center;
+}
+#headArea {
+	text-align:center;
+	font: bold 1.5em "HG丸ｺﾞｼｯｸM-PRO";
+	color: red;
+}
+#indexArea {
+	text-align:center;
+}
+#pdfArea	{
+	text-align:center;
+	width: 100%;
+}
+#img {
+	position: absolute;  top: 70px;  left: 0;
+	width: 100%;
+	height: calc( 100% - 70px );
+}
+input[type="button"] {
+	background: lightcyan;
+	border: 1px solid blue;
+	border-radius: 6px;
+	cursor: pointer;
+	padding: 0 10px;
+	font: normal 0.9rem "メイリオ";
+}
+input[type="button"]:hover, #menu>li:hover {
+	background: lightgreen;
+}
+</style>
+<script>
+</script>
+</head> 
+<body>
+<div id="headArea">東京都中野区啓明国民学校 回想録</div>
+<div id="indexArea">
+		<input type="button" onclick='$("#img").attr("src","00.pdf");' value="表紙">
+		<input type="button" onclick='$("#img").attr("src","01.pdf");' value="1頁">
+		<input type="button" onclick='$("#img").attr("src","02.pdf");' value="2頁">
+		<input type="button" onclick='$("#img").attr("src","03.pdf");' value="3頁">
+		<input type="button" onclick='$("#img").attr("src","04.pdf");' value="4頁">
+		<input type="button" onclick='$("#img").attr("src","05.pdf");' value="5頁">
+		<input type="button" onclick='$("#img").attr("src","06.pdf");' value="6頁">
+		<input type="button" onclick='$("#img").attr("src","07.pdf");' value="7頁">
+		<input type="button" onclick='$("#img").attr("src","08.pdf");' value="8頁">
+		<input type="button" onclick='$("#img").attr("src","09.pdf");' value="9頁">
+		<input type="button" onclick='$("#img").attr("src","10.pdf");' value="10頁">
+		<input type="button" onclick='$("#img").attr("src","11.pdf");' value="11頁">
+		<input type="button" onclick='$("#img").attr("src","12.pdf");' value="12頁">
+		<input type="button" onclick='$("#img").attr("src","13.pdf");' value="13頁">
+		<input type="button" onclick='$("#img").attr("src","14.pdf");' value="14頁">
+</div>
+<div id="pdfArea">
+	<iframe id="img" src="00.pdf"></iframe>
+</div>
+</body>
+</html>
